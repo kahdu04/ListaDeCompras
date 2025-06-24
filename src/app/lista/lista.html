@@ -1,0 +1,59 @@
+<div fxLayout="column" fxLayoutAlign="center center" class="main-content">
+    <div class="container">
+      <h1>Lista de Compras</h1>
+  
+      <form #frm="ngForm" class="add-item-form" (ngSubmit)="adicionarItem()">
+        <input
+          type="text"
+          id="item"
+          name="item"
+          [(ngModel)]="item"
+          placeholder="Digite o nome do item"
+        />
+        <button type="submit">{{ editando ? 'Salvar' : 'Adicionar' }}</button>
+        <button type="button" (click)="limparLista()">Limpar</button>
+        <button type="button" *ngIf="editando" (click)="cancelarEdicao()">Cancelar</button>
+        <mat-form-field appearance="fill" class="filtros">
+            <mat-label>Filtrar</mat-label>
+            <mat-select [(ngModel)]="filtro" name="filtro">
+              <mat-option value="todos">Todos</mat-option>
+              <mat-option value="pendentes">Pendentes</mat-option>
+              <mat-option value="comprados">Comprados</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </form>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Status</th>
+            <th>Editar/Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let elemento of listaFiltrada; trackBy: trackPorId">
+            <td>
+              <span [ngClass]="{ 'item-riscado': elemento.comprado }">{{ elemento.nome }}</span>
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                (click)="riscarItem(elemento)"
+                [checked]="elemento.comprado"
+              />
+            </td>
+            <td class="acoes">
+              <button class="edition-button" type="button" (click)="editarItem(elemento)">✏️</button>
+              <button type="button" (click)="excluirItem(elemento)">❌</button>
+            </td>
+          </tr>
+  
+          <tr *ngIf="listaFiltrada.length === 0">
+            <td colspan="3">Nenhum item adicionado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
